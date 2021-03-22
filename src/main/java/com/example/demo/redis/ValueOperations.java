@@ -1,7 +1,6 @@
-package com.example.demo.redis.operation;
+package com.example.demo.redis;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * @author: flyboy

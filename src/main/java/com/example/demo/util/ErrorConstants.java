@@ -44,7 +44,8 @@ public enum ErrorConstants {
      * Message Common Status
      */
     REQUEST_GOODS_NOT_FOUND(4001,"request goods not found"),
-    REQUEST_PATH_ILLEGAL(4002,"request path illegal")
+    REQUEST_PATH_ILLEGAL(4002,"request path illegal"),
+    ACCESS_LIMIT(4003,"too many requests, please visit later")
     ;
     private final int code;
     private final String msg;

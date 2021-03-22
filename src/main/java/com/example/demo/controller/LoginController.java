@@ -5,13 +5,13 @@ import com.example.demo.dto.MessageRequest;
 import com.example.demo.dto.MessageResponse;
 import com.example.demo.dto.userDto.LoginRequest;
 import com.example.demo.dto.userDto.LoginResponse;
-import com.example.demo.redis.operation.ValueOperations;
+import com.example.demo.redis.RedisTimeUtil;
+import com.example.demo.redis.ValueOperations;
 import com.example.demo.service.UserService;
 import com.example.demo.util.CookieUtil;
 import com.example.demo.util.ErrorConstants;
 import com.example.demo.util.JsonUtil;
-import com.example.demo.util.RedisPrefixKey;
-import org.apache.catalina.User;
+import com.example.demo.redis.RedisPrefixKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +50,7 @@ public class LoginController {
             UserDO userDO = responseData.getUserDO();
 
             String userJson = JsonUtil.getJsonString(userDO);
-            redisValueOperations.set(RedisPrefixKey.USER_NAME.getPrefix() + session.getId() ,userJson);
+            redisValueOperations.set(RedisPrefixKey.USER_NAME.getPrefix() + session.getId() ,userJson, RedisTimeUtil.USER_SESSION_EXPIRE);
         }
         return loginResponse;
     }

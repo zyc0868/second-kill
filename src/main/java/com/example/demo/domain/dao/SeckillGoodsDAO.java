@@ -46,4 +46,21 @@ public class SeckillGoodsDAO {
         }
         return false;
     }
+
+    public void addGoods(SeckillGoodsDO seckillGoodsDO){
+        goodsRepository.saveAndFlush(seckillGoodsDO);
+    }
+
+    // 这里并不严谨，但是为了启动项目时多次插入数据，所以采用了先找手机名字，再判断是否插入的方法
+    public void addGoodsByName(SeckillGoodsDO seckillGoodsDO,String name){
+        SeckillGoodsDO goodsDO = goodsRepository.findByGoodsName(name);
+        if (goodsDO != null){
+            goodsDO.setStartDate(seckillGoodsDO.getStartDate());
+            goodsDO.setEndDate(seckillGoodsDO.getEndDate());
+            goodsRepository.saveAndFlush(goodsDO);
+        }else {
+            goodsRepository.saveAndFlush(seckillGoodsDO);
+        }
+
+    }
 }

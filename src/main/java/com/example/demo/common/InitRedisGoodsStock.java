@@ -2,14 +2,13 @@ package com.example.demo.common;
 
 import com.example.demo.domain.dao.SeckillGoodsDAO;
 import com.example.demo.domain.entity.SeckillGoodsDO;
-import com.example.demo.redis.operation.RedisValueOperations;
-import com.example.demo.redis.operation.ValueOperations;
-import com.example.demo.util.RedisPrefixKey;
+import com.example.demo.redis.RedisTimeUtil;
+import com.example.demo.redis.ValueOperations;
+import com.example.demo.redis.RedisPrefixKey;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ import java.util.List;
 @Service
 public class InitRedisGoodsStock implements InitializingBean {
     @Autowired
-    SeckillGoodsDAO seckillGoodsDAO;
+    private SeckillGoodsDAO seckillGoodsDAO;
     @Autowired
     private ValueOperations redisValueOperations;
 

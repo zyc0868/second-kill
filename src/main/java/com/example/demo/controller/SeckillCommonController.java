@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.AccessLimit;
 import com.example.demo.domain.entity.SeckillOrderDO;
 import com.example.demo.domain.entity.UserDO;
 import com.example.demo.dto.MessageRequest;
@@ -12,16 +13,14 @@ import com.example.demo.dto.seckillCommonDto.PurchaseRequest;
 import com.example.demo.dto.seckillCommonDto.PurchaseResponse;
 import com.example.demo.rabbitMQ.MQSender;
 import com.example.demo.rabbitMQ.SeckillMessage;
-import com.example.demo.redis.operation.RedisValueOperations;
+import com.example.demo.redis.RedisValueOperations;
 import com.example.demo.service.SeckillGoodsService;
 import com.example.demo.service.SeckillOrderService;
 import com.example.demo.util.CookieUtil;
 import com.example.demo.util.ErrorConstants;
 import com.example.demo.util.JsonUtil;
-import com.example.demo.util.RedisPrefixKey;
-import org.aspectj.weaver.patterns.IToken;
+import com.example.demo.redis.RedisPrefixKey;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +48,7 @@ public class SeckillCommonController {
     @Autowired
     MQSender mqSender;
 
+    // 下单
     @PostMapping("/{path}/seckill")
     @ResponseBody
     public MessageResponse<PurchaseResponse> purchase(@RequestBody MessageRequest<PurchaseRequest> request, HttpServletRequest httpServletRequest){
@@ -68,16 +68,17 @@ public class SeckillCommonController {
         if (!pathValid){
             request.response(ErrorConstants.REQUEST_PATH_ILLEGAL,new PurchaseResponse());
         }
-        // 判断库存 预减库存
-        long stock = redisValueOperations.decrement(RedisPrefixKey.GOODS_STOCK.getPrefix()+goodsId);
-        if (stock < 0){
-            request.response(ErrorConstants.GOODS_SOLD_OUT,new PurchaseResponse());
-        }
 
         // 判断是否已经秒杀过
         SeckillOrderDO seckillOrder = seckillOrderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
         if (seckillOrder != null){
             return request.response(ErrorConstants.GOODS_REPEATED_PURCHASE,new PurchaseResponse());
+        }
+
+        // 判断库存 预减库存
+        long stock = redisValueOperations.decrement(RedisPrefixKey.GOODS_STOCK.getPrefix()+goodsId);
+        if (stock < 0){
+            request.response(ErrorConstants.GOODS_SOLD_OUT,new PurchaseResponse());
         }
 
         // 入队
@@ -110,6 +111,7 @@ public class SeckillCommonController {
         return request.response(new PurchaseResultResponse(result));
     }
 
+    @AccessLimit(seconds = 3,limit = 10)
     @PostMapping("/path")
     @ResponseBody
     public MessageResponse<CreatePathResponse> getSeckillPath(@RequestBody MessageRequest<CreatePathRequest> request, HttpServletRequest httpServletRequest){

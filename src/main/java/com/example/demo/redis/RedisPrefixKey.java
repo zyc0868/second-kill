@@ -1,7 +1,6 @@
-package com.example.demo.util;
+package com.example.demo.redis;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +20,9 @@ public enum RedisPrefixKey {
     GOODS_STOCK("goods_stock_"),
     GOODS_OVER("goods_over_"),
 
-    PATH_CHECK("path_")
+    PATH_CHECK("path_"),
+
+    ACCESS_LIMIT("access_")
     ;
     private final String prefix;
 

@@ -15,5 +15,6 @@ import java.util.List;
 @Repository
 public interface SeckillGoodsRepository extends JpaRepository<SeckillGoodsDO, Long> {
     boolean existsById(Long id);
+    SeckillGoodsDO findByGoodsName(String goodsName);
     List<SeckillGoodsDO> findAll();
 }

@@ -38,4 +38,7 @@ public class MessageResponse <T extends BaseResponse> implements Serializable {
         this.msg = error.getMsg();
     }
 
+    public static MessageResponse<BaseResponse> error(@NonNull ErrorConstants error){
+        return new MessageResponse<>(error);
+    }
 }

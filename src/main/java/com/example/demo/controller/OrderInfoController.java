@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.common.AccessLimit;
 import com.example.demo.domain.entity.OrderInfoDO;
 import com.example.demo.domain.entity.SeckillGoodsDO;
 import com.example.demo.domain.entity.UserDO;
@@ -7,14 +8,13 @@ import com.example.demo.dto.MessageRequest;
 import com.example.demo.dto.MessageResponse;
 import com.example.demo.dto.orderDto.OrderDetailRequest;
 import com.example.demo.dto.orderDto.OrderDetailResponse;
-import com.example.demo.redis.operation.RedisValueOperations;
+import com.example.demo.redis.RedisValueOperations;
 import com.example.demo.service.SeckillGoodsService;
 import com.example.demo.service.SeckillOrderService;
 import com.example.demo.util.CookieUtil;
 import com.example.demo.util.ErrorConstants;
 import com.example.demo.util.JsonUtil;
-import com.example.demo.util.RedisPrefixKey;
-import org.aspectj.bridge.Message;
+import com.example.demo.redis.RedisPrefixKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +42,7 @@ public class OrderInfoController {
     @Autowired
     private SeckillOrderService seckillOrderService;
 
+    @AccessLimit
     @PostMapping("/detail")
     @ResponseBody
     public MessageResponse<OrderDetailResponse> orderInfo(@RequestBody MessageRequest<OrderDetailRequest> request, HttpServletRequest httpServletRequest){

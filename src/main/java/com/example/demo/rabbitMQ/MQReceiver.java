@@ -3,7 +3,7 @@ package com.example.demo.rabbitMQ;
 import com.example.demo.domain.entity.SeckillGoodsDO;
 import com.example.demo.domain.entity.SeckillOrderDO;
 import com.example.demo.domain.entity.UserDO;
-import com.example.demo.redis.operation.RedisValueOperations;
+import com.example.demo.redis.RedisValueOperations;
 import com.example.demo.service.SeckillGoodsService;
 import com.example.demo.service.SeckillOrderService;
 import com.example.demo.util.JsonUtil;

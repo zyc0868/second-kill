@@ -1,4 +1,4 @@
-package com.example.demo.redis.operation;
+package com.example.demo.redis;
 
 import lombok.Getter;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;

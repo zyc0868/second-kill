@@ -13,12 +13,13 @@ import com.example.demo.dto.MessageRequest;
 import com.example.demo.dto.MessageResponse;
 import com.example.demo.dto.seckillCommonDto.CreatePathRequest;
 import com.example.demo.dto.seckillCommonDto.CreatePathResponse;
-import com.example.demo.redis.operation.ValueOperations;
+import com.example.demo.redis.RedisTimeUtil;
+import com.example.demo.redis.ValueOperations;
 import com.example.demo.service.SeckillGoodsService;
 import com.example.demo.service.SeckillOrderService;
 import com.example.demo.util.ErrorConstants;
 import com.example.demo.util.MD5Util;
-import com.example.demo.util.RedisPrefixKey;
+import com.example.demo.redis.RedisPrefixKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -134,7 +135,7 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         }
 
         String path = MD5Util.md5(UUID.randomUUID()+"abcd1234");
-        redisValueOperations.set(RedisPrefixKey.PATH_CHECK.getPrefix()+userId+"_"+goodsId,path);
+        redisValueOperations.set(RedisPrefixKey.PATH_CHECK.getPrefix()+userId+"_"+goodsId,path, RedisTimeUtil.GOODS_ID);
         CreatePathResponse response = CreatePathResponse.builder()
                 .path(path)
                 .build();
@@ -142,7 +143,7 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     }
 
     private void setGoodsOver(long goodsId){
-        redisValueOperations.set(RedisPrefixKey.GOODS_OVER.getPrefix()+goodsId,"true");
+        redisValueOperations.set(RedisPrefixKey.GOODS_OVER.getPrefix()+goodsId,"true",RedisTimeUtil.GOODS_ID);
     }
 
     private boolean getGoodsOver(long goodsId){
